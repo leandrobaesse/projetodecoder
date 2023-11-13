@@ -10,11 +10,13 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
+@Validated
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/auth")
@@ -25,7 +27,8 @@ public class AuthenticationController {
 
 
     @PostMapping("/signup")
-    public ResponseEntity<Object> registerUser(@RequestBody @JsonView(UserDto.UserView.RegistrationPost.class) UserDto userDto){
+    public ResponseEntity<Object> registerUser(@RequestBody  @Validated(UserDto.UserView.RegistrationPost.class)
+                                               @JsonView(UserDto.UserView.RegistrationPost.class) UserDto userDto){
 
         if(userService.existsByUserName(userDto.getUsername())){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: Username is already Taken!");
